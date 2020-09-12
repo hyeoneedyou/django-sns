@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-import pdb
+from .models import User
+from users.models import Profile
 
 # Create your views here.
 @login_required
@@ -67,8 +68,3 @@ def post_like(request, post_id):
 def like_list(request):
     likes = request.user.like_user_set.all()
     return render(request, 'posts/like_list.html', {'likes': likes})
-
-
-def mypage(request):
-    posts = Post.objects.filter(user=request.user)
-    return render(request, 'mypage.html', {'posts' : posts})
