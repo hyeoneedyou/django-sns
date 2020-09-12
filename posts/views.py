@@ -67,3 +67,8 @@ def post_like(request, post_id):
 def like_list(request):
     likes = request.user.like_user_set.all()
     return render(request, 'posts/like_list.html', {'likes': likes})
+
+
+def mypage(request):
+    posts = Post.objects.filter(user=request.user)
+    return render(request, 'mypage.html', {'posts' : posts})
