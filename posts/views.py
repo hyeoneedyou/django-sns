@@ -4,19 +4,27 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import User
 from users.models import Profile
+from .forms import PostForm
 
 # Create your views here.
 @login_required
 def create(request):
+    # if request.method == "POST":
+    #     title = request.POST.get("title")
+    #     content = request.POST.get("content")
+    #     image = request.FILES.get("image")
+    #     user = request.user
+    #     post = Post.objects.create(title=title, content=content, image=image, user=user)
+    #     return redirect('home')
+    # return render(request, 'posts/create.html')
     if request.method == "POST":
-        title = request.POST.get("title")
-        content = request.POST.get("content")
-        image = request.FILES.get("image")
-        user = request.user
-        post = Post.objects.create(title=title, content=content, image=image, user=user)
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(user = request.user)
         return redirect('home')
-    return render(request, 'posts/create.html')
-
+    else:
+        form = PostForm()
+    return render(request, 'posts/create.html', {'form':form})
 
 @login_required
 def update(request, id):
